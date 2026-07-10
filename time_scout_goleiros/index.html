@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <title>Time Scout Goleiros</title>
+  <style>
+    :root{--bg:#0f172a;--card:#111c32;--card2:#18243b;--txt:#f8fafc;--muted:#94a3b8;--blue:#2563eb;--green:#22c55e;--red:#ef4444;--yellow:#facc15;--border:#26344f}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0f172a,#111827);color:var(--txt)}button,input{font:inherit}.app{max-width:1180px;margin:0 auto;padding:14px 14px 100px}.top{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.96);backdrop-filter:blur(10px);padding:12px 0;border-bottom:1px solid var(--border)}h1{font-size:24px;margin:0 0 6px}.match{display:grid;grid-template-columns:1fr 1fr 110px 80px 80px;gap:8px}.match input{background:#0b1220;border:1px solid var(--border);color:var(--txt);border-radius:12px;padding:10px}.periods{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.btn{border:0;border-radius:14px;padding:10px 14px;color:white;background:var(--card2);cursor:pointer}.btn.primary{background:var(--blue)}.btn.danger{background:#991b1b}.btn.active{outline:2px solid #60a5fa;background:#1d4ed8}.layout{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;margin-top:14px}.panel{background:rgba(17,28,50,.92);border:1px solid var(--border);border-radius:20px;padding:14px;box-shadow:0 12px 28px rgba(0,0,0,.18)}.panel h2{font-size:16px;margin:0 0 12px;color:#dbeafe}.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.action{min-height:58px;border:1px solid var(--border);background:#0b1220;color:var(--txt);border-radius:15px;padding:8px;cursor:pointer;font-weight:800}.action small{display:block;color:var(--muted);font-weight:600}.action.selected{background:#1d4ed8;border-color:#93c5fd;box-shadow:0 0 0 2px rgba(147,197,253,.25)}.keepers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.keeper{position:relative;min-height:72px;border:1px solid var(--border);background:#0b1220;color:var(--txt);border-radius:16px;padding:12px;cursor:pointer;text-align:left}.keeper b{font-size:18px}.keeper span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.keeper.flash{animation:flash .45s}@keyframes flash{0%{background:#166534}100%{background:#0b1220}}.addrow{display:flex;gap:8px;margin-bottom:10px}.addrow input{flex:1;background:#0b1220;border:1px solid var(--border);color:var(--txt);border-radius:12px;padding:10px}.last{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0b1220;border:1px solid var(--border);border-radius:16px;padding:10px;margin-top:12px}.last small{color:var(--muted)}.log{max-height:190px;overflow:auto;margin-top:8px}.logitem{display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding:7px 0;color:#dbeafe;font-size:13px}.report{overflow:auto}.report table{width:100%;border-collapse:collapse;min-width:1050px}.report th,.report td{border-bottom:1px solid var(--border);padding:9px;text-align:center}.report th:first-child,.report td:first-child{text-align:left;position:sticky;left:0;background:#111c32}.muted{color:var(--muted);font-size:13px}@media(max-width:850px){.match{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.actions{grid-template-columns:repeat(2,1fr)}.keepers{grid-template-columns:repeat(2,1fr)}.app{padding:10px 10px 90px}.action{min-height:58px}.keeper{min-height:64px}}@media(max-width:420px){.actions{grid-template-columns:repeat(2,1fr)}.keepers{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1>🧤 Time Scout Goleiros</h1>
+    <div class="match">
+      <input id="team" placeholder="Seu time" value="Paraná Clube">
+      <input id="opponent" placeholder="Adversário">
+      <input id="date" type="date">
+      <input id="scoreFor" type="number" placeholder="Gols" min="0">
+      <input id="scoreAgainst" type="number" placeholder="Sofr." min="0">
+    </div>
+    <div class="periods">
+      <button class="btn active" id="p1" onclick="setPeriod(1)">1º tempo</button>
+      <button class="btn" id="p2" onclick="setPeriod(2)">2º tempo</button>
+      <button class="btn primary" onclick="saveMatch()">Salvar jogo</button>
+      <button class="btn" onclick="exportCSV()">Exportar Excel/CSV</button>
+      <button class="btn danger" onclick="clearCurrent()">Zerar jogo</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>Ação rápida selecionada</h2>
+      <div class="actions" id="actions"></div>
+      <div class="last">
+        <div><small>Última ação</small><div id="lastAction">Nenhuma ação lançada</div></div>
+        <button class="btn" onclick="undoLast()">↩ Desfazer</button>
+      </div>
+      <div class="log" id="log"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Goleiros</h2>
+      <div class="addrow"><input id="keeperName" placeholder="Nome do goleiro"><button class="btn primary" onclick="addKeeper()">Adicionar</button></div>
+      <p class="muted">Fluxo rápido: escolha a ação e toque no goleiro. A ação fica selecionada até você trocar.</p>
+      <div class="keepers" id="keepers"></div>
+    </section>
+  </div>
+
+  <section class="panel report" style="margin-top:14px">
+    <h2>Relatório dos goleiros</h2>
+    <div id="report"></div>
+  </section>
+</div>
+<script>
+const stats=[
+ {key:'defPes',label:'🦶 Def. pés',short:'Defesa com os pés'},
+ {key:'defMeia',label:'🧤 Def. meia alt.',short:'Defesa meia altura'},
+ {key:'defRasteira',label:'⬇️ Def. rasteira',short:'Defesa rasteira'},
+ {key:'defCorporal',label:'🧱 Def. corporal',short:'Defesa corporal'},
+ {key:'golAlto',label:'🥅 Gol alto',short:'Gol sofrido alto'},
+ {key:'golMeia',label:'🥅 Gol meia alt.',short:'Gol sofrido meia altura'},
+ {key:'golRasteiro',label:'🥅 Gol rasteiro',short:'Gol sofrido rasteiro'},
+ {key:'golCara',label:'⚔️ Gol cara a cara',short:'Gol sofrido cara a cara'},
+ {key:'def1x1',label:'🛡️ Def. 1x1',short:'Defesa um contra um'},
+ {key:'saidaGol',label:'🚪 Saída do gol',short:'Saída do gol'},
+ {key:'passeCerto',label:'✅ Passe certo',short:'Passe certo'},
+ {key:'passeErrado',label:'❌ Passe errado',short:'Passe errado'},
+ {key:'lancCerto',label:'🎯 Lanç. certo',short:'Lançamento certo'},
+ {key:'lancErrado',label:'↗️ Lanç. errado',short:'Lançamento errado'},
+ {key:'assist',label:'🎯 Assistência',short:'Assistência'},
+ {key:'erroGol',label:'⚠️ Erro → gol',short:'Erro que gerou finalização com gol'}
+];
+let state={period:1,selected:'defPes',keepers:[],events:[],meta:{}};
+const storeKey='timeScoutGoleiros_v1';
+function load(){try{const s=localStorage.getItem(storeKey); if(s) state=JSON.parse(s)}catch(e){}; if(!document.getElementById('date').value) document.getElementById('date').value=new Date().toISOString().slice(0,10); syncMetaToInputs(); render();}
+function persist(){state.meta={team:team.value,opponent:opponent.value,date:date.value,scoreFor:scoreFor.value,scoreAgainst:scoreAgainst.value}; localStorage.setItem(storeKey,JSON.stringify(state));}
+function syncMetaToInputs(){team.value=state.meta.team||'Paraná Clube'; opponent.value=state.meta.opponent||''; date.value=state.meta.date||new Date().toISOString().slice(0,10); scoreFor.value=state.meta.scoreFor||''; scoreAgainst.value=state.meta.scoreAgainst||'';}
+function setPeriod(p){state.period=p; persist(); render();}
+function renderActions(){actions.innerHTML=stats.map(s=>`<button class="action ${state.selected===s.key?'selected':''}" onclick="selectAction('${s.key}')">${s.label}<small>${s.short}</small></button>`).join('')}
+function selectAction(k){state.selected=k; persist(); renderActions(); renderKeepers();}
+function addKeeper(){const name=keeperName.value.trim(); if(!name) return; state.keepers.push({id:Date.now()+Math.random(),name}); keeperName.value=''; persist(); render();}
+function removeKeeper(id){if(confirm('Remover goleiro?')){state.keepers=state.keepers.filter(p=>p.id!==id); state.events=state.events.filter(e=>e.keeperId!==id); persist(); render();}}
+function register(keeperId){if(!state.selected){alert('Selecione uma ação.'); return;} const keeper=state.keepers.find(p=>p.id===keeperId); const st=stats.find(s=>s.key===state.selected); const ev={id:Date.now()+Math.random(),keeperId,keeperName:keeper.name,stat:state.selected,statLabel:st.short,period:state.period,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}; state.events.push(ev); persist(); const el=document.querySelector(`[data-keeper="${keeperId}"]`); if(el){el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash')} renderLog(); renderReport();}
+function undoLast(){state.events.pop(); persist(); renderLog(); renderReport();}
+function countFor(keeperId,key,period=null){return state.events.filter(e=>e.keeperId===keeperId&&e.stat===key&&(period?e.period===period:true)).length}
+function renderKeepers(){keepers.innerHTML=state.keepers.map(p=>`<button class="keeper" data-keeper="${p.id}" onclick="register(${p.id})"><b>${p.name}</b><span>Toque para lançar ${stats.find(s=>s.key===state.selected)?.short||''}</span><span ondblclick="event.stopPropagation();removeKeeper(${p.id})">duplo toque aqui para remover</span></button>`).join('') || '<p class="muted">Cadastre os goleiros para começar.</p>'}
+function renderLog(){const last=state.events[state.events.length-1]; lastAction.textContent=last?`${last.statLabel} → ${last.keeperName} (${last.period}ºT)`:'Nenhuma ação lançada'; log.innerHTML=state.events.slice(-12).reverse().map(e=>`<div class="logitem"><span>${e.statLabel} → <b>${e.keeperName}</b></span><span>${e.period}ºT • ${e.time}</span></div>`).join('')}
+function renderReport(){let html='<table><thead><tr><th>Goleiro</th>'+stats.map(s=>`<th>${s.short}</th>`).join('')+'<th>Total ações</th></tr></thead><tbody>'; const rows=state.keepers.map(p=>{let total=0; const cells=stats.map(s=>{const c=countFor(p.id,s.key); total+=c; return `<td>${c}</td>`}).join(''); return {name:p.name,total,html:`<tr><td><b>${p.name}</b></td>${cells}<td><b>${total}</b></td></tr>`}}).sort((a,b)=>b.total-a.total); html+=rows.map(r=>r.html).join('')+'</tbody></table>'; report.innerHTML=html;}
+function render(){p1.classList.toggle('active',state.period===1); p2.classList.toggle('active',state.period===2); renderActions(); renderKeepers(); renderLog(); renderReport();}
+function saveMatch(){persist(); const hist=JSON.parse(localStorage.getItem('timeScoutGoleirosHistory_v1')||'[]'); hist.unshift({savedAt:new Date().toISOString(),state:JSON.parse(JSON.stringify(state))}); localStorage.setItem('timeScoutGoleirosHistory_v1',JSON.stringify(hist.slice(0,100))); alert('Jogo salvo no histórico deste aparelho.');}
+function clearCurrent(){if(confirm('Zerar estatísticas deste jogo mantendo goleiros?')){state.events=[]; persist(); render();}}
+function exportCSV(){persist(); const headers=['Goleiro',...stats.map(s=>s.short),'Total ações']; const lines=[headers.join(';')]; state.keepers.map(p=>{let total=0; const vals=stats.map(s=>{const c=countFor(p.id,s.key); total+=c; return c}); return [p.name,...vals,total]}).sort((a,b)=>b[b.length-1]-a[a.length-1]).forEach(r=>lines.push(r.join(';'))); const meta=`${state.meta.team||'Time'} x ${state.meta.opponent||'Adversário'};Placar;${state.meta.scoreFor||0}x${state.meta.scoreAgainst||0};Data;${state.meta.date||''}\n`; const blob=new Blob(['\ufeff'+meta+lines.join('\n')],{type:'text/csv;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='time-scout-goleiros.csv'; a.click(); URL.revokeObjectURL(a.href);}
+['team','opponent','date','scoreFor','scoreAgainst'].forEach(id=>setTimeout(()=>document.getElementById(id).addEventListener('input',persist),0));
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+load();
+</script>
+</body>
+</html>
