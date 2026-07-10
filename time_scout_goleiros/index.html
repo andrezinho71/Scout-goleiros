@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Time Scout Goleiros</title>
 <style>
-  *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#111827} .wrap{max-width:1100px;margin:0 auto;padding:14px} .card{background:#fff;border-radius:14px;padding:14px;margin:12px 0;box-shadow:0 3px 12px rgba(0,0,0,.08)} h1{margin:6px 0 4px;font-size:26px}.sub{color:#64748b;margin-bottom:10px} input,button,select{font-size:16px;border-radius:9px;border:1px solid #cbd5e1;padding:10px} input{width:100%;margin:5px 0}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{border:0;color:white;font-weight:700;cursor:pointer}.blue{background:#2563eb}.green{background:#15803d}.red{background:#dc2626}.gray{background:#475569}.orange{background:#f59e0b;color:#111827}.purple{background:#7c3aed}.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}.action{background:#e2e8f0;color:#111827;border:2px solid transparent;font-weight:700;min-height:50px}.action.active{background:#1d4ed8;color:#fff;border-color:#0f172a;transform:scale(1.02)}.keepers{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.keeper{background:#0f172a;color:#fff;border:0;border-radius:14px;padding:18px 10px;font-size:18px;font-weight:800;min-height:66px}.keeper.flash{background:#16a34a}.last{font-size:15px;color:#334155}.log{max-height:160px;overflow:auto;border:1px solid #e2e8f0;border-radius:10px;padding:8px;background:#f8fafc}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #cbd5e1;padding:7px;text-align:center}th{background:#0f172a;color:white;position:sticky;top:0}td:first-child,th:first-child{text-align:left;font-weight:700}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#dbeafe;color:#1e40af;font-weight:800}.small{font-size:12px;color:#64748b}.hidden{display:none}@media(max-width:700px){.wrap{padding:8px}.card{padding:10px;margin:8px 0}.actions{grid-template-columns:repeat(2,1fr)}.keepers{grid-template-columns:repeat(2,1fr)}h1{font-size:22px}button{font-size:14px;padding:9px}.keeper{font-size:16px;min-height:58px}}
+  *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#111827} .wrap{max-width:1200px;margin:0 auto;padding:14px} .card{background:#fff;border-radius:14px;padding:14px;margin:12px 0;box-shadow:0 3px 12px rgba(0,0,0,.08)} h1{margin:6px 0 4px;font-size:26px} h2{margin:6px 0 12px}.sub,.small{color:#64748b}.small{font-size:12px} input,button{font-size:16px;border-radius:9px;border:1px solid #cbd5e1;padding:10px} input{width:100%;margin:5px 0}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{border:0;color:#fff;font-weight:700;cursor:pointer}.blue{background:#2563eb}.green{background:#15803d}.red{background:#dc2626}.gray{background:#475569}.orange{background:#f59e0b;color:#111827}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#dbeafe;color:#1e40af;font-weight:800}.keeper-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px}.keeper-card{border:1px solid #e2e8f0;border-radius:14px;padding:12px;background:#f8fafc}.keeper-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}.keeper-name{font-size:20px;font-weight:900}.stat-list{display:grid;gap:7px}.stat-row{display:grid;grid-template-columns:1fr 42px 46px 42px;gap:6px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:6px}.stat-label{font-weight:700;font-size:13px}.count{text-align:center;font-weight:900;font-size:17px}.plus,.minus{border:0;color:#fff;font-weight:900;cursor:pointer;padding:8px 0;border-radius:8px}.plus{background:#15803d}.minus{background:#dc2626}.last{font-size:15px;color:#334155}.log{max-height:150px;overflow:auto;border:1px solid #e2e8f0;border-radius:10px;padding:8px;background:#f8fafc}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #cbd5e1;padding:7px;text-align:center}th{background:#0f172a;color:white;position:sticky;top:0}td:first-child,th:first-child{text-align:left;font-weight:700}@media(max-width:700px){.wrap{padding:8px}.card{padding:10px;margin:8px 0}.keeper-grid{grid-template-columns:1fr}h1{font-size:22px}button{font-size:14px;padding:9px}.stat-row{grid-template-columns:1fr 38px 42px 38px}.stat-label{font-size:12px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card">
     <h1>🧤 Time Scout Goleiros</h1>
-    <div class="sub">Modo rápido: selecione uma ação e toque no goleiro.</div>
+    <div class="sub">Modelo em lista: cada goleiro aparece com todas as ações e botões + / −.</div>
     <input id="team" placeholder="Nome do time" />
     <input id="opp" placeholder="Adversário" />
     <div class="row">
@@ -26,25 +26,20 @@
     </div>
   </div>
 
-  <div class="card" id="manageCard">
-    <h2>Goleiros</h2>
+  <div class="card">
+    <h2>Cadastrar goleiros</h2>
     <div class="row">
       <input id="keeperName" placeholder="Nome do goleiro" style="flex:1;min-width:220px" />
       <button class="btn blue" onclick="addKeeper()">Adicionar</button>
       <button class="btn gray" onclick="loadExample()">Exemplo</button>
       <button class="btn red" onclick="clearKeepers()">Limpar goleiros</button>
     </div>
+    <div class="small">Dica: após cadastrar, cada goleiro aparece abaixo com todos os botões de scout.</div>
   </div>
 
   <div class="card">
-    <h2>Ações rápidas</h2>
-    <div class="small">A ação selecionada fica azul. Depois toque no goleiro.</div><br/>
-    <div class="actions" id="actions"></div>
-  </div>
-
-  <div class="card">
-    <h2>Toque no goleiro</h2>
-    <div class="keepers" id="keepers"></div>
+    <h2>Scout dos goleiros</h2>
+    <div id="keepers" class="keeper-grid"></div>
     <p class="last"><b>Última ação:</b> <span id="lastAction">Nenhuma</span></p>
     <div class="row">
       <button class="btn red" onclick="undo()">↩ Desfazer última</button>
@@ -67,14 +62,13 @@
 
 <script>
 const ACTIONS = [
-  ['defesa_encaixe','🧤 Defesa encaixe/pacote'],
+  ['defesa_encaixe','🧤 Defesa alta'],
   ['defesa_meia','🧤 Defesa meia altura'],
   ['defesa_rasteira','🧤 Defesa rasteira'],
-  ['defesa_corporal','🧤 Defesa corporal'],
+  ['defesa_corporal','🧤 Defesa peitoral'],
   ['gol_alto','🥅 Gol sofrido alto'],
   ['gol_meia','🥅 Gol sofrido meia altura'],
   ['gol_rasteiro','🥅 Gol sofrido rasteiro'],
-  ['cara_cara','⚔️ Cara a cara'],
   ['defesa_1x1','🛡️ Defesa 1x1'],
   ['saida_gol','🚀 Saída do gol'],
   ['passe_certo','✅ Passe certo'],
@@ -85,70 +79,58 @@ const ACTIONS = [
   ['erro_fin_gol','⚠️ Erro gerou finalização/gol']
 ];
 let period = 1;
-let selected = ACTIONS[0][0];
 let keepers = [];
 let events = [];
 
-function save(){
-  localStorage.setItem('ts_goleiros_v1', JSON.stringify({team:team.value,opp:opp.value,date:date.value,comp:comp.value,keepers,events,period,selected}));
-}
+function save(){ localStorage.setItem('ts_goleiros_lista_v2', JSON.stringify({team:team.value,opp:opp.value,date:date.value,comp:comp.value,keepers,events,period})); }
 function load(){
-  const s = localStorage.getItem('ts_goleiros_v1');
-  if(s){try{const d=JSON.parse(s); team.value=d.team||''; opp.value=d.opp||''; date.value=d.date||new Date().toISOString().slice(0,10); comp.value=d.comp||''; keepers=d.keepers||[]; events=d.events||[]; period=d.period||1; selected=d.selected||ACTIONS[0][0];}catch(e){}}
+  const s = localStorage.getItem('ts_goleiros_lista_v2');
+  if(s){try{const d=JSON.parse(s); team.value=d.team||''; opp.value=d.opp||''; date.value=d.date||new Date().toISOString().slice(0,10); comp.value=d.comp||''; keepers=d.keepers||[]; events=d.events||[]; period=d.period||1;}catch(e){}}
   if(!date.value) date.value = new Date().toISOString().slice(0,10);
   renderAll();
 }
-function renderAll(){renderActions();renderKeepers();renderLog();renderReport();setPeriod(period,false)}
-function renderActions(){
-  actions.innerHTML='';
-  ACTIONS.forEach(([key,label])=>{
-    const b=document.createElement('button'); b.className='action '+(selected===key?'active':''); b.textContent=label; b.onclick=()=>{selected=key; save(); renderActions();}; actions.appendChild(b);
-  });
-}
-function addKeeper(){
-  const n=keeperName.value.trim(); if(!n) return;
-  if(!keepers.includes(n)) keepers.push(n);
-  keeperName.value=''; save(); renderKeepers(); renderReport();
-}
-function clearKeepers(){ if(confirm('Apagar lista de goleiros?')){keepers=[];events=[];save();renderAll();}}
-function loadExample(){ keepers=['Goleiro 1','Goleiro 2','Goleiro 3']; save(); renderAll(); }
-function renderKeepers(){
-  keepersEl = document.getElementById('keepers'); keepersEl.innerHTML='';
-  if(keepers.length===0){keepersEl.innerHTML='<div class="small">Cadastre os goleiros acima.</div>';return;}
-  keepers.forEach(name=>{
-    const b=document.createElement('button'); b.className='keeper'; b.textContent=name; b.onclick=()=>record(name,b); keepersEl.appendChild(b);
-  });
-}
+function renderAll(){renderKeepers();renderLog();renderReport();setPeriod(period,false)}
+function addKeeper(){ const n=keeperName.value.trim(); if(!n) return; if(!keepers.includes(n)) keepers.push(n); keeperName.value=''; save(); renderAll(); }
+function clearKeepers(){ if(confirm('Apagar lista de goleiros e estatísticas?')){keepers=[];events=[];save();renderAll();lastAction.textContent='Nenhuma';}}
+function loadExample(){ keepers=['Goleiro 1','Goleiro 2']; save(); renderAll(); }
 function actionLabel(key){return (ACTIONS.find(a=>a[0]===key)||['',key])[1];}
-function record(name,btn){
-  const ev={id:Date.now()+Math.random(), period, keeper:name, action:selected, label:actionLabel(selected), time:new Date().toLocaleTimeString('pt-BR')};
-  events.push(ev); lastAction.textContent=`${ev.label} → ${name} (${period}º tempo)`;
-  btn.classList.add('flash'); setTimeout(()=>btn.classList.remove('flash'),250);
-  save(); renderLog(); renderReport();
+function countFor(name,key,p=period){ return events.filter(e=>e.keeper===name && e.action===key && e.period===p).length; }
+function renderKeepers(){
+  const el=document.getElementById('keepers'); el.innerHTML='';
+  if(keepers.length===0){el.innerHTML='<div class="small">Cadastre os goleiros acima.</div>';return;}
+  keepers.forEach(name=>{
+    const card=document.createElement('div'); card.className='keeper-card';
+    card.innerHTML = `<div class="keeper-head"><div class="keeper-name">${name}</div><button class="btn red" onclick="removeKeeper('${escapeJS(name)}')">Remover</button></div><div class="stat-list">`+
+      ACTIONS.map(([key,label])=>`<div class="stat-row"><div class="stat-label">${label}</div><button class="minus" onclick="decrement('${escapeJS(name)}','${key}')">−</button><div class="count" id="c_${safeId(name)}_${key}">${countFor(name,key)}</div><button class="plus" onclick="increment('${escapeJS(name)}','${key}')">+</button></div>`).join('')+
+      `</div>`;
+    el.appendChild(card);
+  });
 }
-function undo(){
-  const ev=events.pop(); if(ev){lastAction.textContent=`Desfeito: ${ev.label} → ${ev.keeper}`; save(); renderLog(); renderReport();}
+function safeId(s){return s.replace(/[^a-zA-Z0-9]/g,'_')}
+function escapeJS(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+function increment(name,key){
+  const ev={id:Date.now()+Math.random(), period, keeper:name, action:key, label:actionLabel(key), time:new Date().toLocaleTimeString('pt-BR')};
+  events.push(ev); lastAction.textContent=`${ev.label} → ${name} (${period}º tempo)`; save(); renderAll();
 }
-function resetStats(){ if(confirm('Zerar todas as estatísticas?')){events=[];save();renderLog();renderReport();lastAction.textContent='Nenhuma';}}
-function setPeriod(p,doSave=true){period=p; periodLabel.textContent=p+'º tempo'; document.getElementById('p1').style.outline=p===1?'3px solid #111827':'none'; document.getElementById('p2').style.outline=p===2?'3px solid #111827':'none'; if(doSave) save();}
+function decrement(name,key){
+  for(let i=events.length-1;i>=0;i--){ if(events[i].keeper===name && events[i].action===key && events[i].period===period){ const ev=events.splice(i,1)[0]; lastAction.textContent=`Removido: ${ev.label} → ${name} (${period}º tempo)`; save(); renderAll(); return; } }
+  lastAction.textContent=`Nada para remover em ${actionLabel(key)} → ${name} (${period}º tempo)`;
+}
+function removeKeeper(name){ if(confirm('Remover '+name+'?')){keepers=keepers.filter(k=>k!==name); events=events.filter(e=>e.keeper!==name); save(); renderAll();} }
+function undo(){ const ev=events.pop(); if(ev){lastAction.textContent=`Desfeito: ${ev.label} → ${ev.keeper}`; save(); renderAll();} }
+function resetStats(){ if(confirm('Zerar todas as estatísticas?')){events=[];save();renderAll();lastAction.textContent='Nenhuma';}}
+function setPeriod(p,doSave=true){period=p; periodLabel.textContent=p+'º tempo'; document.getElementById('p1').style.outline=p===1?'3px solid #111827':'none'; document.getElementById('p2').style.outline=p===2?'3px solid #111827':'none'; if(doSave){save();renderKeepers();}}
 function renderLog(){
   if(events.length===0){log.innerHTML='Sem registros.';return;}
   log.innerHTML=events.slice(-20).reverse().map(e=>`${e.time} — ${e.period}ºT — <b>${e.keeper}</b>: ${e.label}`).join('<br>');
 }
-function countsFor(name, p=null){
-  const obj={}; ACTIONS.forEach(([k])=>obj[k]=0);
-  events.filter(e=>e.keeper===name && (p===null || e.period===p)).forEach(e=>obj[e.action]++);
-  return obj;
-}
+function countsFor(name, p=null){ const obj={}; ACTIONS.forEach(([k])=>obj[k]=0); events.filter(e=>e.keeper===name && (p===null || e.period===p)).forEach(e=>obj[e.action]++); return obj; }
 function renderReport(){
   if(keepers.length===0){report.innerHTML='<p class="small">Cadastre os goleiros para gerar relatório.</p>';return;}
   let html='<table><thead><tr><th>Goleiro</th><th>Tempo</th>'+ACTIONS.map(a=>`<th>${a[1]}</th>`).join('')+'<th>Total ações</th></tr></thead><tbody>';
   [1,2,'Total'].forEach(p=>{
     html += `<tr><th colspan="${ACTIONS.length+3}" style="background:#1d4ed8;color:#fff;text-align:left">${p==='Total'?'TOTAL GERAL':p+'º TEMPO'}</th></tr>`;
-    keepers.forEach(name=>{
-      const c=countsFor(name,p==='Total'?null:p); const total=Object.values(c).reduce((a,b)=>a+b,0);
-      html += `<tr><td>${name}</td><td>${p==='Total'?'1º+2º':p+'º'}</td>`+ACTIONS.map(([k])=>`<td>${c[k]||0}</td>`).join('')+`<td><b>${total}</b></td></tr>`;
-    });
+    keepers.forEach(name=>{ const c=countsFor(name,p==='Total'?null:p); const total=Object.values(c).reduce((a,b)=>a+b,0); html += `<tr><td>${name}</td><td>${p==='Total'?'1º+2º':p+'º'}</td>`+ACTIONS.map(([k])=>`<td>${c[k]||0}</td>`).join('')+`<td><b>${total}</b></td></tr>`; });
   });
   html+='</tbody></table>'; report.innerHTML=html;
 }
